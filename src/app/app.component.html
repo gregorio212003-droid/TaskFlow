@@ -1,0 +1,301 @@
+
+<div class="app-container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">T</div>
+      <span>TaskFlow</span>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="section-label">MENU</p>
+
+      <nav class="navigation">
+
+        <button
+          class="nav-item"
+          [class.active]="currentFilter() === 'all'"
+          (click)="setFilter('all')">
+
+          <span class="nav-icon">▦</span>
+          <span>All Tasks</span>
+          <span class="nav-count">{{ totalTasks() }}</span>
+
+        </button>
+
+        <button
+          class="nav-item"
+          [class.active]="currentFilter() === 'active'"
+          (click)="setFilter('active')">
+
+          <span class="nav-icon">◷</span>
+          <span>Active</span>
+          <span class="nav-count">{{ activeTasks() }}</span>
+
+        </button>
+
+        <button
+          class="nav-item"
+          [class.active]="currentFilter() === 'completed'"
+          (click)="setFilter('completed')">
+
+          <span class="nav-icon">✓</span>
+          <span>Completed</span>
+          <span class="nav-count">{{ completedTasks() }}</span>
+
+        </button>
+
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+
+      <div class="user-profile">
+        <div class="avatar">U</div>
+
+        <div class="user-info">
+          <strong>My Workspace</strong>
+          <span>Personal Account</span>
+        </div>
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HEADER -->
+    <header class="top-header">
+
+      <div>
+        <p class="welcome-text">Welcome back!</p>
+        <h1>My Tasks</h1>
+      </div>
+
+      <div class="header-date">
+        <span class="date-icon">▣</span>
+        <span>My Workspace</span>
+      </div>
+
+    </header>
+
+    <!-- INTRO -->
+    <section class="intro-section">
+
+      <h2>Stay organized, stay productive.</h2>
+      <p>Keep track of your tasks and get things done.</p>
+
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+
+      <!-- TOTAL TASKS -->
+      <div class="stat-card">
+
+        <div class="stat-top">
+          <span class="stat-icon blue">▤</span>
+          <span class="stat-label">Total Tasks</span>
+        </div>
+
+        <h3>{{ totalTasks() }}</h3>
+        <p>All your tasks</p>
+
+      </div>
+
+      <!-- ACTIVE TASKS -->
+      <div class="stat-card">
+
+        <div class="stat-top">
+          <span class="stat-icon orange">◷</span>
+          <span class="stat-label">Active Tasks</span>
+        </div>
+
+        <h3>{{ activeTasks() }}</h3>
+        <p>Tasks in progress</p>
+
+      </div>
+
+      <!-- COMPLETED TASKS -->
+      <div class="stat-card">
+
+        <div class="stat-top">
+          <span class="stat-icon green">✓</span>
+          <span class="stat-label">Completed</span>
+        </div>
+
+        <h3>{{ completedTasks() }}</h3>
+        <p>Tasks completed</p>
+
+      </div>
+
+    </section>
+
+    <!-- TASK SECTION -->
+    <section class="task-section">
+
+      <div class="task-header">
+
+        <div>
+          <h2>My Tasks</h2>
+          <p>Manage your daily activities.</p>
+        </div>
+
+        <button
+          class="add-button"
+          type="button"
+          (click)="openAddForm()">
+
+          <span>+</span> Add Task
+
+        </button>
+
+      </div>
+
+      <!-- FILTER -->
+      <div class="filter-tabs">
+
+        <button
+          class="filter-btn"
+          [class.selected]="currentFilter() === 'all'"
+          (click)="setFilter('all')">
+
+          All Tasks
+
+        </button>
+
+        <button
+          class="filter-btn"
+          [class.selected]="currentFilter() === 'active'"
+          (click)="setFilter('active')">
+
+          Active
+
+        </button>
+
+        <button
+          class="filter-btn"
+          [class.selected]="currentFilter() === 'completed'"
+          (click)="setFilter('completed')">
+
+          Completed
+
+        </button>
+
+      </div>
+
+      <!-- TASK LIST -->
+      <div class="task-list">
+
+        @for (task of filteredTasks(); track task.id) {
+
+          <div class="task-item">
+
+            <!-- CHECKBOX -->
+            <button
+              type="button"
+              class="task-check"
+              [class.checked]="task.completed"
+              (click)="toggleTask(task.id)">
+
+              @if (task.completed) {
+                ✓
+              }
+
+            </button>
+
+            <!-- TASK DETAILS -->
+            <div class="task-details">
+
+              <h3 [class.task-done]="task.completed">
+                {{ task.title }}
+              </h3>
+
+              <p>
+                {{ task.description || 'No description' }}
+              </p>
+
+            </div>
+
+            <!-- TASK STATUS -->
+            <span
+              class="task-status"
+              [class.completed-status]="task.completed"
+              [class.active-status]="!task.completed">
+
+              {{ task.completed ? 'Completed' : 'Active' }}
+
+            </span>
+
+            <!-- EDIT AND DELETE -->
+            <div class="task-actions">
+
+              <button
+                type="button"
+                class="edit-button"
+                (click)="openEditForm(task)">
+
+                Edit
+
+              </button>
+
+              <button
+                type="button"
+                class="delete-button"
+                (click)="deleteTask(task.id)">
+
+                Delete
+
+              </button>
+
+            </div>
+
+          </div>
+
+        } @empty {
+
+          <!-- EMPTY STATE -->
+          <div class="empty-state">
+
+            <div class="empty-icon">✓</div>
+
+            <h3>No tasks found</h3>
+
+            <p>
+              There are no tasks in this category.
+            </p>
+
+          </div>
+
+        }
+
+      </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+      <p>© 2026 TaskFlow. Stay productive!</p>
+
+    </footer>
+
+  </main>
+
+  <!-- ADD / EDIT TASK FORM -->
+  @if (isFormOpen()) {
+
+    <app-task-form
+      [task]="editingTask()"
+      (save)="saveTask($event)"
+      (cancel)="closeForm()">
+
+    </app-task-form>
+
+  }
+
+</div>

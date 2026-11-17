@@ -1,0 +1,76 @@
+
+<div class="modal-overlay" (click)="closeForm()">
+
+  <div
+    class="modal-card"
+    (click)="$event.stopPropagation()">
+
+    <div class="modal-header">
+
+      <div>
+        <h2>{{ task ? 'Edit Task' : 'Add New Task' }}</h2>
+        <p>Fill in your task information below.</p>
+      </div>
+
+      <button
+        type="button"
+        class="close-button"
+        (click)="closeForm()">
+        ×
+      </button>
+
+    </div>
+
+    <form (ngSubmit)="submitForm()">
+
+      <div class="form-group">
+        <label for="taskTitle">Task Title</label>
+
+        <input
+          id="taskTitle"
+          type="text"
+          name="title"
+          [(ngModel)]="title"
+          placeholder="Enter your task title"
+          maxlength="100"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="taskDescription">Description</label>
+
+        <textarea
+          id="taskDescription"
+          name="description"
+          [(ngModel)]="description"
+          placeholder="Write a short description..."
+          rows="4"
+          maxlength="500">
+        </textarea>
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="closeForm()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="save-button"
+          [disabled]="!title.trim()">
+
+          {{ task ? 'Save Changes' : 'Add Task' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
